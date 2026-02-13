@@ -228,19 +228,19 @@ ui <- page_navbar(
         id = "region_tabs",
         nav_panel(
           "PCA Plot",
-          plotOutput("pca_plot", height = "600px"),
-          downloadButton("download_pca_plot", "Download Plot", class = "btn-sm")
+          downloadButton("download_pca_plot", "Download Plot", class = "btn-sm mb-3"),
+          plotOutput("pca_plot", height = "600px")
         ),
         nav_panel(
           "Venn Diagram",
+          downloadButton("download_venn_plot", "Download Plot", class = "btn-sm mb-3"),
           plotOutput("venn_plot", height = "600px"),
-          verbatimTextOutput("overlap_stats"),
-          downloadButton("download_venn_plot", "Download Plot", class = "btn-sm")
+          verbatimTextOutput("overlap_stats")
         ),
         nav_panel(
           "DE Results Table",
-          DTOutput("region_genes_table"),
-          downloadButton("download_region_genes", "Download Table", class = "btn-sm")
+          downloadButton("download_region_genes", "Download Table", class = "btn-sm mb-3"),
+          DTOutput("region_genes_table")
         )
       )
     ),
@@ -2628,6 +2628,38 @@ server <- function(input, output, session) {
         plot.new()
         text(0.5, 0.5, "No positive enrichment", cex = 1.5)
       }
+      
+      if (nrow(plot_data_neg) > 0) {
+        p_neg <- ggplot(plot_data_neg, aes(x = Region, y = Minor_Cell_Type)) +
+          geom_point(aes(size = abs(Signature_Score), color = Signature_Score)) +
+          scale_color_gradient2(low = "blue", mid = "white", high = "white",
+                                midpoint = 0, name = "Signature Score") +
+          scale_size_continuous(range = c(2, 15), name = "|Score|") +
+          theme_minimal(base_size = 14) +
+          theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1),
+                axis.text.y = element_text(size = 12),
+                panel.grid.major = element_line(color = "gray90"),
+                panel.border = element_rect(fill = NA, color = "black")) +
+          labs(title = "Negative Signature Scores",
+               x = "Histopathological Region",
+               y = "Cell Type")
+        print(p_neg)
+      } else {
+        plot.new()
+        text(0.5, 0.5, "No negative enrichment", cex = 1.5)
+      }
+      
+      dev.off()
+    }
+  )
+  
+  output$download_query_plot_negative <- downloadHandler(
+    filename = function() {
+      paste0("query_bubble_plot_negative_", Sys.Date(), ".pdf")
+    },
+    content = function(file) {
+      pdf(file, width = 12, height = 10)
+      plot_data_neg <- rv$query_results[rv$query_results$Signature_Score < 0, , drop = FALSE]
       
       if (nrow(plot_data_neg) > 0) {
         p_neg <- ggplot(plot_data_neg, aes(x = Region, y = Minor_Cell_Type)) +
