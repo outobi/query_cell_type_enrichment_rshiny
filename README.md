@@ -1,6 +1,6 @@
 # Multi-Omics Integration Shiny App
 
-A Shiny web application for integrating spatial proteomics data with single-cell RNA-seq data to infer disease-enriched or associated cell types within histopathological regions.
+A R Shiny web application for integrating spatial proteomics data with single-cell RNA-seq data to infer disease-enriched or associated cell types within histopathological regions by query enrichment method.
 
 ## Deployment
 
@@ -52,12 +52,11 @@ shiny::runApp("app.R")
 ## File Upload Limits
 
 The app supports large file uploads (up to 10GB) for scRNA-seq data matrices.
+Larger file uploads with S3 is on the way.
 
 ## References
 
 - Wang et al. Proteomes, 2025, 13(1):3 — DOI: 10.3390/proteomes13010003
 - Wang et al. Proteomes, 2025, 13(2):17 - DOI: 10.3390/proteomes13020017
 
-## License
 
-[Add your license here]
