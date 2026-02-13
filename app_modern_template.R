@@ -474,7 +474,7 @@ ui <- page_navbar(
       card_header(class = "bg-primary text-white", "scRNA-seq Data Processing & Validation"),
       
       layout_column_wrap(
-        width = 1,
+        width = 1/3,
         card(
           card_header("Sample Selection (Optional)"),
           p("Filter cells by sample subtype or patient resource. Leave blank to keep all samples."),
@@ -496,26 +496,19 @@ ui <- page_navbar(
         card(
           card_header("Cell Type Annotation Columns"),
           p("Specify the two cell type annotation columns (major and minor)."),
-          layout_column_wrap(
-            width = 1/2,
-            div(
-              tags$strong("Major Cell Type Column:"),
-              selectInput("celltype_major_column", NULL, choices = NULL)
-            ),
-            div(
-              tags$strong("Minor Cell Type Column:"),
-              selectInput("celltype_minor_column", NULL, choices = NULL)
-            )
-          ),
+          tags$strong("Major Cell Type Column:"),
+          selectInput("celltype_major_column", NULL, choices = NULL),
+          tags$strong("Minor Cell Type Column:"),
+          selectInput("celltype_minor_column", NULL, choices = NULL),
           tags$div(style = "font-size: 0.85em; color: #6c757d; font-style: italic; margin-top: 10px;",
             "Major = broader categories (e.g., T cells, B cells). Minor = specific subtypes (e.g., CD4+ T cells, CD8+ T cells)."
           )
-        ),
-        
-        card(
-          card_header("Run Processing"),
-          actionButton("process_scrna_btn", "Run Preprocessing & Validation", class = "btn btn-primary w-100 btn-lg", icon = bs_icon("gear"))
         )
+      ),
+      
+      card(
+        card_header("Run Processing"),
+        actionButton("process_scrna_btn", "Run Preprocessing & Validation", class = "btn btn-primary w-100 btn-lg", icon = bs_icon("gear"))
       ),
       
       hr(),
@@ -542,24 +535,25 @@ ui <- page_navbar(
     navset_card_pill(
       nav_panel(
         "Positive Enrichment",
-        plotOutput("query_bubble_plot_positive", height = "600px"),
-        downloadButton("download_query_plot", "Download Plot", class = "btn-sm")
+        downloadButton("download_query_plot", "Download Plot", class = "btn-sm mb-3"),
+        plotOutput("query_bubble_plot_positive", height = "600px")
       ),
       nav_panel(
         "Negative Enrichment",
+        downloadButton("download_query_plot_negative", "Download Plot", class = "btn-sm mb-3"),
         plotOutput("query_bubble_plot_negative", height = "600px")
       ),
       nav_panel(
         "Overlap Analysis",
+        downloadButton("download_overlap_genes", "Download Overlap Genes", class = "btn-sm mb-3"),
         DTOutput("overlap_summary_table"),
         hr(),
-        DTOutput("overlap_genes_table"),
-        downloadButton("download_overlap_genes", "Download Overlap Genes", class = "btn-sm")
+        DTOutput("overlap_genes_table")
       ),
       nav_panel(
         "Results Table",
-        DTOutput("query_results_table"),
-        downloadButton("download_query_results", "Download Results", class = "btn-sm")
+        downloadButton("download_query_results", "Download Results", class = "btn-sm mb-3"),
+        DTOutput("query_results_table")
       )
     )
   ),
