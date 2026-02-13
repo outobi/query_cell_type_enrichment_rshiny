@@ -1,5 +1,5 @@
 options(shiny.maxRequestSize = 10000 * 1024^2)
-
+options(shiny.sanitize.errors = FALSE) 
 
 # Multi-Omics Integration Shiny App
 # Integrating Spatial Proteomics and scRNA-seq
@@ -59,7 +59,7 @@ ui <- page_navbar(
   nav_panel(
     title = "Home", 
     value = "home",
-    icon = bs_icon("house-fill"),
+    icon = icon("home"),
     layout_column_wrap(
       width = 1,
       card(
@@ -96,7 +96,7 @@ ui <- page_navbar(
   nav_panel(
     title = "Step 1: Proteomics", 
     value = "proteomics_upload",
-    icon = bs_icon("upload"),
+    icon = icon("upload"),
     layout_column_wrap(
       width = 1/2,
       card(
@@ -144,7 +144,7 @@ ui <- page_navbar(
         ),
         div(
           class = "alert alert-warning",
-          p(bs_icon("lightbulb"), tags$b(" Test with example data:")),
+          p(icon("info-circle"), tags$b(" Test with example data:")),
           p("Laser microdissection coupled LC/MS spatial proteomics expression matrix"),
           p("Stroma region (n = 11) vs Tumor region (n = 12) in human TNBC FFPE tissue sections"),
           p("6842 protein IDs"),
@@ -208,12 +208,12 @@ ui <- page_navbar(
   nav_panel(
     title = "Step 2: Regions", 
     value = "region_genes",
-    icon = bs_icon("search"),
+    icon = icon("search"),
     card(
       card_header(class = "bg-primary text-white", "Region-Specific Protein Identification"),
       div(
         class = "alert alert-info",
-        p(bs_icon("info-circle"), " This step identifies proteins significantly upregulated in each region using limma differential expression analysis.")
+        p(icon("info-circle"), " This step identifies proteins significantly upregulated in each region using limma differential expression analysis.")
       )
     ),
     layout_sidebar(
@@ -251,7 +251,7 @@ ui <- page_navbar(
   nav_panel(
     title = "Step 3: scRNA-seq", 
     value = "scrna_upload",
-    icon = bs_icon("upload"),
+    icon = icon("upload"),
     layout_column_wrap(
       width = 1/2,
       # Column 1: Matrix & Genes
@@ -469,7 +469,7 @@ ui <- page_navbar(
   nav_panel(
     title = "Step 4: Processing", 
     value = "scrna_processing",
-    icon = bs_icon("gear"),
+    icon = icon("cogs"),
     card(
       card_header(class = "bg-primary text-white", "scRNA-seq Data Processing & Validation"),
       
@@ -508,7 +508,7 @@ ui <- page_navbar(
       
       card(
         card_header("Run Processing"),
-        actionButton("process_scrna_btn", "Run Preprocessing & Validation", class = "btn btn-primary w-100 btn-lg", icon = bs_icon("gear"))
+        actionButton("process_scrna_btn", "Run Preprocessing & Validation", class = "btn btn-primary w-100 btn-lg", icon = icon("cogs"))
       ),
       
       hr(),
@@ -521,12 +521,12 @@ ui <- page_navbar(
   nav_panel(
     title = "Step 5: Query Method", 
     value = "query_method",
-    icon = bs_icon("search"),
+    icon = icon("search"),
     card(
       card_header(class = "bg-primary text-white", "Cell-Type Enrichment Analysis"),
       div(
         class = "alert alert-info",
-        p(bs_icon("info-circle"), " The Query Method computes signature scores for region-specific proteins across cell types, identifying enriched populations using z-score statistics.")
+        p(icon("info-circle"), " The Query Method computes signature scores for region-specific proteins across cell types, identifying enriched populations using z-score statistics.")
       ),
       actionButton("run_query_method_btn", "Run Query Method Analysis", class = "btn btn-primary btn-lg"),
       hr(),
@@ -562,7 +562,7 @@ ui <- page_navbar(
   nav_panel(
     title = "Results & Download", 
     value = "results",
-    icon = bs_icon("download"),
+    icon = icon("download"),
     card(
       card_header(class = "bg-primary text-white", "Analysis Summary & Downloads")
     ),
@@ -1268,7 +1268,7 @@ server <- function(input, output, session) {
             ),
             div(
               style = "background-color: #fcf8e3; padding: 10px; border-radius: 3px; margin-top: 10px;",
-              p(icon("lightbulb"), tags$b(" Performance Tip:"), " Filtering by subtype before creating Seurat object can significantly reduce computation time!",
+              p(icon("info-circle"), tags$b(" Performance Tip:"), " Filtering by subtype before creating Seurat object can significantly reduce computation time!",
                 style = "margin: 0;")
             )
           )
@@ -3007,7 +3007,7 @@ server <- function(input, output, session) {
     },
     content = function(file) {
       # Get the app directory
-      app_dir <- "/home/ubuntu/my-hpc-app/data"
+      app_dir <- "./data"
       example_file <- file.path(app_dir, "spatial proteomics expression matrix example.xlsx")
       
       if (file.exists(example_file)) {
@@ -3024,7 +3024,7 @@ server <- function(input, output, session) {
     },
     content = function(file) {
       # Get the app directory
-      app_dir <- "/home/ubuntu/my-hpc-app/data"
+      app_dir <- "./data"
       example_file <- file.path(app_dir, "spatial proteomics metadata example.xlsx")
       
       if (file.exists(example_file)) {
